@@ -27738,7 +27738,7 @@ case 3:case 4:case 5:return A.dg(null,t.H)}},
 a0N(){var s=0,r=A.w(t.H),q,p
 var $async$a0N=A.r(function(a,b){if(a===1)return A.t(b,r)
 for(;;)switch(s){case 0:s=2
-return A.o($.az3().Bs(0,"env"),$async$a0N)
+return A.o($.az3().Bs(0,"config_env"),$async$a0N)
 case 2:q=$.az3().gWf().h(0,"SUPABASE_URL")
 q.toString
 p=$.az3().gWf().h(0,"SUPABASE_ANON_KEY")
