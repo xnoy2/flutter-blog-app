@@ -27694,7 +27694,7 @@ case 3:case 4:case 5:return A.dh(null,t.H)}},
 a0J(){var s=0,r=A.x(t.H),q,p
 var $async$a0J=A.t(function(a,b){if(a===1)return A.u(b,r)
 for(;;)switch(s){case 0:s=2
-return A.o($.ayS().Bo(0,".env"),$async$a0J)
+return A.o($.ayS().Bo(0,"env"),$async$a0J)
 case 2:q=$.ayS().gWe().h(0,"SUPABASE_URL")
 q.toString
 p=$.ayS().gWe().h(0,"SUPABASE_ANON_KEY")
