@@ -32,7 +32,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     loadComments();
   }
 
-  // ================= LOAD COMMENTS =================
+  // ================= LOAD COMMENTS ==============
   Future<void> loadComments() async {
     final res = await supabase
         .from('comments')

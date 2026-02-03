@@ -10,7 +10,7 @@ class BlogCreatePage extends StatefulWidget {
   State<BlogCreatePage> createState() => _BlogCreatePageState();
 }
 
-class _BlogCreatePageState extends State<BlogCreatePage> 
+class _BlogCreatePageState extends State<BlogCreatePage> {
   final titleCtrl = TextEditingController();
   final contentCtrl = TextEditingController();
   Uint8List? _imageBytes;

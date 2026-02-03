@@ -77,7 +77,7 @@ class _BlogListPageState extends State<BlogListPage> {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Delete Blog'),
-        content: const Text('Are you sure you want to delete this blog?')
+        content: const Text('Are you sure you want to delete this blog?'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('No')),
           TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Yes')),
