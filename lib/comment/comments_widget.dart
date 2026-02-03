@@ -17,7 +17,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
   final _controller = TextEditingController();
 
   List<Map<String, dynamic>> comments = [];
-  Uint8List? imageBytes;
+  List<Uint8List> imageBytesList = [];
   bool loading = false;
 
   @override
@@ -32,11 +32,13 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     loadComments();
   }
 
+  // ================= LOAD COMMENTS =================
   Future<void> loadComments() async {
     final res = await supabase
         .from('comments')
         .select(
-            'id, author, content, image_url, profiles(display_name, avatar_url)')
+          'id, author, content, image_urls, profiles(display_name, avatar_url)',
+        )
         .eq('blog_id', widget.postId)
         .order('created_at');
 
@@ -44,13 +46,21 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     setState(() => comments = List<Map<String, dynamic>>.from(res));
   }
 
-  Future<void> pickImage() async {
-    final img = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (img == null) return;
-    imageBytes = await img.readAsBytes();
-    setState(() {});
+  // ================= PICK MULTIPLE IMAGES =================
+  Future<void> pickImages() async {
+    final picker = ImagePicker();
+    final images = await picker.pickMultiImage();
+    if (images.isEmpty) return;
+
+    final bytes =
+        await Future.wait(images.map((img) => img.readAsBytes()));
+
+    setState(() {
+      imageBytesList.addAll(bytes);
+    });
   }
 
+  // ================= DELETE COMMENT =================
   Future<void> confirmDeleteComment(String id) async {
     final ok = await showDialog<bool>(
       context: context,
@@ -59,11 +69,13 @@ class _CommentsWidgetState extends State<CommentsWidget> {
         content: const Text('Are you sure you want to delete this comment?'),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('No')),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('No'),
+          ),
           TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Yes')),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Yes'),
+          ),
         ],
       ),
     );
@@ -74,143 +86,149 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     }
   }
 
-  //  EDIT COMMENT 
+  // ================= EDIT COMMENT =================
   Future<void> editComment(Map c) async {
-    final ctrl = TextEditingController(text: c['content']);
+  final ctrl = TextEditingController(text: c['content']);
 
-    Uint8List? editImageBytes;
-    bool removeImage = false;
-    final String? originalImageUrl = c['image_url'];
+  List<String> existingImageUrls =
+  List<String>.from(c['image_urls'] ?? []);
 
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setDialogState) {
-            return AlertDialog(
-              title: const Text('Edit Comment'),
-              content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextField(controller: ctrl),
-                    const SizedBox(height: 12),
+  List<Uint8List> newImages = [];
 
-                    // IMAGE PRIORITY
-                    if (editImageBytes != null)
-                      Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Image.memory(editImageBytes!, height: 120),
-                          IconButton(
-                            icon: const Icon(Icons.close, color: Colors.red),
-                            onPressed: () {
-                              setDialogState(() {
-                                editImageBytes = null;
-                                removeImage = true;
-                              });
-                            },
-                          ),
-                        ],
-                      )
-                    else if (originalImageUrl != null && !removeImage)
-                      Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          Image.network(originalImageUrl, height: 120),
-                          IconButton(
-                            icon: const Icon(Icons.close, color: Colors.red),
-                            onPressed: () {
-                              setDialogState(() {
-                                removeImage = true;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
+  Future<void> pickNewImages() async {
+    final picker = ImagePicker();
+    final images = await picker.pickMultiImage();
+    if (images.isEmpty) return;
 
-                    const SizedBox(height: 10),
+    final bytes =
+        await Future.wait(images.map((img) => img.readAsBytes()));
 
-                    ElevatedButton(
-                      onPressed: () async {
-                        final img = await ImagePicker()
-                            .pickImage(source: ImageSource.gallery);
-                        if (img != null) {
-                          final bytes = await img.readAsBytes();
-                          setDialogState(() {
-                            editImageBytes = bytes;
-                            removeImage = false;
-                          });
-                        }
-                      },
-                      child: Text(
-                        editImageBytes != null ||
-                                (originalImageUrl != null && !removeImage)
-                            ? 'Change Image'
-                            : 'Upload Image',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                    onPressed: () => Navigator.pop(context, false),
-                    child: const Text('Cancel')),
-                TextButton(
-                    onPressed: () => Navigator.pop(context, true),
-                    child: const Text('Save')),
-              ],
-            );
-          },
-        );
-      },
-    );
-
-    if (ok != true) return;
-
-    String? imageUrl;
-
-    // NEW image 
-    if (editImageBytes != null) {
-      final path = 'comments/${DateTime.now().millisecondsSinceEpoch}.png';
-      await supabase.storage
-          .from('blog-images')
-          .uploadBinary(path, editImageBytes!);
-      imageUrl = supabase.storage.from('blog-images').getPublicUrl(path);
-    }
-    // Removed image
-    else if (removeImage) {
-      imageUrl = null;
-    }
-    // Keep old image
-    else {
-      imageUrl = originalImageUrl;
-    }
-
-    await supabase.from('comments').update({
-  'content': ctrl.text.trim(),
-  'image_url': imageUrl,
-    }).eq('id', c['id']);
-
-    // FORCE PROFILE REFRESH
-    await supabase.auth.refreshSession();
-
-    //  Reload comments with updated avatar/name
-    loadComments();
-
+    newImages.addAll(bytes);
   }
 
-  // Add comment
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setModalState) {
+          return AlertDialog(
+            title: const Text('Edit Comment'),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextField(controller: ctrl),
 
+                  const SizedBox(height: 12),
+
+                  // EXISTING IMAGES
+                  if (existingImageUrls.isNotEmpty)
+                    Wrap(
+                      spacing: 6,
+                      children: List.generate(existingImageUrls.length, (i) {
+                        return Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Image.network(
+                              existingImageUrls[i],
+                              height: 90,
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.close,
+                                  color: Colors.red),
+                              onPressed: () {
+                                setModalState(() {
+                                  existingImageUrls.removeAt(i);
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+
+                  // NEW IMAGES
+                  if (newImages.isNotEmpty)
+                    Wrap(
+                      spacing: 6,
+                      children: List.generate(newImages.length, (i) {
+                        return Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Image.memory(newImages[i], height: 90),
+                            IconButton(
+                              icon: const Icon(Icons.close,
+                                  color: Colors.red),
+                              onPressed: () {
+                                setModalState(() {
+                                  newImages.removeAt(i);
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+
+                  const SizedBox(height: 8),
+                  TextButton.icon(
+                    onPressed: () async {
+                      await pickNewImages();
+                      setModalState(() {});
+                    },
+                    icon: const Icon(Icons.image),
+                    label: const Text('Add Images'),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Save'),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+
+  if (ok != true) return;
+
+  /// Upload NEW images
+  for (final bytes in newImages) {
+    final path =
+        'comments/${DateTime.now().millisecondsSinceEpoch}_${existingImageUrls.length}.png';
+
+    await supabase.storage
+        .from('blog-images')
+        .uploadBinary(path, bytes);
+
+    existingImageUrls.add(
+      supabase.storage.from('blog-images').getPublicUrl(path),
+    );
+  }
+
+  await supabase.from('comments').update({
+    'content': ctrl.text.trim(),
+    'image_urls': existingImageUrls,
+  }).eq('id', c['id']);
+
+  loadComments();
+}
+
+
+  // ================= ADD COMMENT =================
   Future<void> addComment() async {
     if (user == null) return;
 
     final text = _controller.text.trim();
 
-    //  Block only if BOTH are empty
-    if (text.isEmpty && imageBytes == null) {
+    if (text.isEmpty && imageBytesList.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Comment or image is required')),
       );
@@ -218,33 +236,41 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     }
 
     setState(() => loading = true);
-    String? imageUrl;
 
-    if (imageBytes != null) {
-      final path = 'comments/${DateTime.now().millisecondsSinceEpoch}.png';
+    List<String> imageUrls = [];
+
+    for (final bytes in imageBytesList) {
+      final path =
+          'comments/${DateTime.now().millisecondsSinceEpoch}_${imageUrls.length}.png';
+
       await supabase.storage
           .from('blog-images')
-          .uploadBinary(path, imageBytes!);
-      imageUrl = supabase.storage.from('blog-images').getPublicUrl(path);
-    } 
+          .uploadBinary(path, bytes);
+
+      imageUrls.add(
+        supabase.storage.from('blog-images').getPublicUrl(path),
+      );
+    }
 
     await supabase.from('comments').insert({
       'blog_id': widget.postId,
       'author': user!.id,
-      'content': _controller.text.trim(),
-      'image_url': imageUrl,
+      'content': text,
+      'image_urls': imageUrls,
     });
 
     _controller.clear();
-    imageBytes = null;
+    imageBytesList.clear();
     await loadComments();
     setState(() => loading = false);
   }
 
+  // ================= UI =================
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // COMMENTS LIST
         for (final c in comments)
           ListTile(
             leading: AvatarWidget(
@@ -259,10 +285,20 @@ class _CommentsWidgetState extends State<CommentsWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(c['content']),
-                if (c['image_url'] != null)
+                if (c['image_urls'] != null &&
+                    (c['image_urls'] as List).isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: Image.network(c['image_url'], height: 120),
+                    child: Wrap(
+                      spacing: 6,
+                      children: List.generate(
+                        c['image_urls'].length,
+                        (i) => Image.network(
+                          c['image_urls'][i],
+                          height: 100,
+                        ),
+                      ),
+                    ),
                   ),
               ],
             ),
@@ -283,27 +319,36 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                 : null,
           ),
 
-       if (imageBytes != null)
-        Padding(
-          padding: const EdgeInsets.only(top: 6),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Image.memory(imageBytes!, height: 120),
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.red),
-                  onPressed: () => setState(() => imageBytes = null),
-                ),
-              ],
-            ),
+        // IMAGE PREVIEW BEFORE SEND
+        if (imageBytesList.isNotEmpty)
+          Wrap(
+            spacing: 8,
+            children: List.generate(imageBytesList.length, (i) {
+              return Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  Image.memory(imageBytesList[i], height: 100),
+                  IconButton(
+                    icon:
+                        const Icon(Icons.close, color: Colors.red),
+                    onPressed: () {
+                      setState(() {
+                        imageBytesList.removeAt(i);
+                      });
+                    },
+                  ),
+                ],
+              );
+            }),
           ),
-        ),
 
+        // INPUT ROW
         Row(
           children: [
-            IconButton(icon: const Icon(Icons.image), onPressed: pickImage),
+            IconButton(
+              icon: const Icon(Icons.image),
+              onPressed: pickImages,
+            ),
             Expanded(
               child: TextField(
                 controller: _controller,

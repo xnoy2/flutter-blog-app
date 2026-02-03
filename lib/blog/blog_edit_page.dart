@@ -21,7 +21,7 @@ class _BlogEditPageState extends State<BlogEditPage> {
   void initState() {
     super.initState();
     titleCtrl = TextEditingController(text: widget.blog['title']);
-    contentCtrl = TextEditingController(text: widget.blog['content']);
+    contentCtrl = TextEditingController(text: widget.blog['content'])
     imageUrl = widget.blog['image_url'];
   }
 
