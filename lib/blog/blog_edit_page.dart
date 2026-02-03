@@ -15,7 +15,10 @@ class _BlogEditPageState extends State<BlogEditPage> {
   late TextEditingController titleCtrl;
   late TextEditingController contentCtrl;
 
+  // Existing images (from DB)
   List<String> imageUrls = [];
+
+  // Newly picked images (local only)
   List<Uint8List> newImages = [];
 
   @override
@@ -26,21 +29,23 @@ class _BlogEditPageState extends State<BlogEditPage> {
     imageUrls = List<String>.from(widget.blog['image_urls'] ?? []);
   }
 
+  // PICK MULTIPLE IMAGES
   Future<void> pickImages() async {
     final picker = ImagePicker();
     final images = await picker.pickMultiImage();
     if (images.isEmpty) return;
 
-    final bytes = await Future.wait(
-      images.map((img) => img.readAsBytes()),
-    );
+    final bytes =
+        await Future.wait(images.map((img) => img.readAsBytes()));
 
     setState(() {
       newImages.addAll(bytes);
     });
   }
 
+  // SAVE UPDATE
   Future<void> updateBlog() async {
+    // Upload newly added images
     for (final bytes in newImages) {
       final path =
           'blogs/${widget.blog['id']}_${DateTime.now().millisecondsSinceEpoch}.png';
@@ -60,9 +65,12 @@ class _BlogEditPageState extends State<BlogEditPage> {
       'image_urls': imageUrls,
     }).eq('id', widget.blog['id']);
 
+    if (!mounted) return;
+
     ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('Updated successfully')),
-  );
+      const SnackBar(content: Text('Updated successfully')),
+    );
+
     Navigator.pop(context);
   }
 
@@ -70,13 +78,15 @@ class _BlogEditPageState extends State<BlogEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Edit Blog')),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            /// EXISTING IMAGES
             if (imageUrls.isNotEmpty)
               Wrap(
                 spacing: 8,
+                runSpacing: 8,
                 children: List.generate(imageUrls.length, (i) {
                   return Stack(
                     alignment: Alignment.topRight,
@@ -95,6 +105,33 @@ class _BlogEditPageState extends State<BlogEditPage> {
                 }),
               ),
 
+            /// NEW IMAGES PREVIEW
+            if (newImages.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: List.generate(newImages.length, (i) {
+                  return Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Image.memory(newImages[i], height: 120),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.red),
+                        onPressed: () {
+                          setState(() {
+                            newImages.removeAt(i);
+                          });
+                        },
+                      ),
+                    ],
+                  );
+                }),
+              ),
+            ],
+
+            const SizedBox(height: 16),
+
             TextField(
               controller: titleCtrl,
               decoration: const InputDecoration(labelText: 'Title'),
@@ -105,6 +142,7 @@ class _BlogEditPageState extends State<BlogEditPage> {
               maxLines: 5,
             ),
 
+            const SizedBox(height: 12),
             ElevatedButton(
               onPressed: pickImages,
               child: const Text('Add Images'),
