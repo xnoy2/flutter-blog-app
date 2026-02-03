@@ -91,7 +91,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
   final ctrl = TextEditingController(text: c['content']);
 
   List<String> existingImageUrls =
-  List<String>.from(c['image_urls'] ?? []);
+      List<String>.from(c['image_urls'] ?? []);
 
   List<Uint8List> newImages = [];
 
@@ -220,7 +220,6 @@ class _CommentsWidgetState extends State<CommentsWidget> {
 
   loadComments();
 }
-
 
   // ================= ADD COMMENT =================
   Future<void> addComment() async {

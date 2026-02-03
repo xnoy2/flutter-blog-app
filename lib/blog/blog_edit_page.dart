@@ -1,6 +1,6 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../supabase_client.dart';
 
 class BlogEditPage extends StatefulWidget {
@@ -14,44 +14,55 @@ class BlogEditPage extends StatefulWidget {
 class _BlogEditPageState extends State<BlogEditPage> {
   late TextEditingController titleCtrl;
   late TextEditingController contentCtrl;
-  String? imageUrl;
-  bool removeImage = false;
+
+  List<String> imageUrls = [];
+  List<Uint8List> newImages = [];
 
   @override
   void initState() {
     super.initState();
     titleCtrl = TextEditingController(text: widget.blog['title']);
     contentCtrl = TextEditingController(text: widget.blog['content']);
-    imageUrl = widget.blog['image_url'];
+    imageUrls = List<String>.from(widget.blog['image_urls'] ?? []);
   }
 
-  Future<void> pickImage() async {
-  final file = await ImagePicker().pickImage(source: ImageSource.gallery);
-  if (file == null) return;
+  Future<void> pickImages() async {
+    final picker = ImagePicker();
+    final images = await picker.pickMultiImage();
+    if (images.isEmpty) return;
 
-  final bytes = await file.readAsBytes();
-  final path =
-      'blogs/${widget.blog['id']}_${DateTime.now().millisecondsSinceEpoch}.png';
+    final bytes = await Future.wait(
+      images.map((img) => img.readAsBytes()),
+    );
 
-  await supabase.storage.from('blog-images').uploadBinary(
-    path,
-    bytes,
-    fileOptions: FileOptions(upsert: true),
-  );
-
-  setState(() {
-    imageUrl = supabase.storage.from('blog-images').getPublicUrl(path);
-    removeImage = false;
-  });
-}
+    setState(() {
+      newImages.addAll(bytes);
+    });
+  }
 
   Future<void> updateBlog() async {
+    for (final bytes in newImages) {
+      final path =
+          'blogs/${widget.blog['id']}_${DateTime.now().millisecondsSinceEpoch}.png';
+
+      await supabase.storage
+          .from('blog-images')
+          .uploadBinary(path, bytes);
+
+      imageUrls.add(
+        supabase.storage.from('blog-images').getPublicUrl(path),
+      );
+    }
+
     await supabase.from('blogs').update({
-      'title': titleCtrl.text,
-      'content': contentCtrl.text,
-      'image_url': removeImage ? null : imageUrl,
+      'title': titleCtrl.text.trim(),
+      'content': contentCtrl.text.trim(),
+      'image_urls': imageUrls,
     }).eq('id', widget.blog['id']);
 
+    ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Updated successfully')),
+  );
     Navigator.pop(context);
   }
 
@@ -63,16 +74,27 @@ class _BlogEditPageState extends State<BlogEditPage> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            if (imageUrl != null && !removeImage)
-              Column(
-                children: [
-                  Image.network(imageUrl!, height: 180),
-                  TextButton(
-                    onPressed: () => setState(() => removeImage = true),
-                    child: const Text('Remove image'),
-                  ),
-                ],
+            if (imageUrls.isNotEmpty)
+              Wrap(
+                spacing: 8,
+                children: List.generate(imageUrls.length, (i) {
+                  return Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Image.network(imageUrls[i], height: 120),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.red),
+                        onPressed: () {
+                          setState(() {
+                            imageUrls.removeAt(i);
+                          });
+                        },
+                      ),
+                    ],
+                  );
+                }),
               ),
+
             TextField(
               controller: titleCtrl,
               decoration: const InputDecoration(labelText: 'Title'),
@@ -82,14 +104,12 @@ class _BlogEditPageState extends State<BlogEditPage> {
               decoration: const InputDecoration(labelText: 'Content'),
               maxLines: 5,
             ),
+
             ElevatedButton(
-              onPressed: pickImage,
-              child: Text(
-                (imageUrl == null || removeImage)
-                    ? 'Upload Image'
-                    : 'Change Image',
-              ),
+              onPressed: pickImages,
+              child: const Text('Add Images'),
             ),
+
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: updateBlog,

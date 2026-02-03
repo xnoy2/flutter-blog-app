@@ -49,6 +49,7 @@ class _BlogListPageState extends State<BlogListPage> {
         .select()
         .eq('id', user!.id)
         .maybeSingle();
+
     if (!mounted) return;
     setState(() => myProfile = res);
   }
@@ -79,8 +80,12 @@ class _BlogListPageState extends State<BlogListPage> {
         title: const Text('Delete Blog'),
         content: const Text('Are you sure you want to delete this blog?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('No')),
-          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Yes')),
+          TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('No')),
+          TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Yes')),
         ],
       ),
     );
@@ -110,11 +115,9 @@ class _BlogListPageState extends State<BlogListPage> {
                 context,
                 MaterialPageRoute(builder: (_) => const BlogCreatePage()),
               );
-              setState(() {
-                blogs.clear();
-                offset = 0;
-                hasMore = true;
-              });
+              blogs.clear();
+              offset = 0;
+              hasMore = true;
               fetchBlogs();
             },
           ),
@@ -128,15 +131,12 @@ class _BlogListPageState extends State<BlogListPage> {
                     MaterialPageRoute(builder: (_) => const ProfilePage()),
                   );
 
-                  // FORCE REFRESH
                   blogs.clear();
                   offset = 0;
                   hasMore = true;
-
                   await fetchMyProfile();
                   await fetchBlogs();
                 },
-
                 child: AvatarWidget(
                   imageUrl: myProfile!['avatar_url'],
                   size: 34,
@@ -145,12 +145,10 @@ class _BlogListPageState extends State<BlogListPage> {
             ),
           IconButton(
             icon: const Icon(Icons.logout),
-            tooltip: 'Logout',
             onPressed: () async => supabase.auth.signOut(),
           ),
         ],
       ),
-
       body: ListView.builder(
         controller: _scroll,
         itemCount: blogs.length + (hasMore ? 1 : 0),
@@ -190,7 +188,8 @@ class _BlogListPageState extends State<BlogListPage> {
                         PopupMenuButton(
                           itemBuilder: (_) => const [
                             PopupMenuItem(value: 'edit', child: Text('Edit')),
-                            PopupMenuItem(value: 'delete', child: Text('Delete')),
+                            PopupMenuItem(
+                                value: 'delete', child: Text('Delete')),
                           ],
                           onSelected: (v) async {
                             if (v == 'edit') {
@@ -200,11 +199,9 @@ class _BlogListPageState extends State<BlogListPage> {
                                   builder: (_) => BlogEditPage(blog: blog),
                                 ),
                               );
-                              setState(() {
-                                blogs.clear();
-                                offset = 0;
-                                hasMore = true;
-                              });
+                              blogs.clear();
+                              offset = 0;
+                              hasMore = true;
                               fetchBlogs();
                             } else {
                               confirmDelete(blog['id']);
@@ -219,32 +216,36 @@ class _BlogListPageState extends State<BlogListPage> {
                   /// TITLE
                   Text(
                     blog['title'],
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 8),
 
-                  /// IMAGE
-                  if (blog['image_url'] != null)
-                    AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: Image.network(
-                        blog['image_url'],
-                        fit: BoxFit.contain,
+                  /// MULTIPLE IMAGES
+                  if (blog['image_urls'] != null &&
+                      (blog['image_urls'] as List).isNotEmpty)
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: List.generate(
+                        blog['image_urls'].length,
+                        (i) => Image.network(
+                          blog['image_urls'][i],
+                          height: 160,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
 
                   const SizedBox(height: 8),
 
                   /// CONTENT
-                  Text(
-                    blog['content'],
-                    textAlign: TextAlign.left,
-                  ),
+                  Text(blog['content']),
 
                   const SizedBox(height: 12),
 
+                  /// COMMENTS
                   CommentsWidget(postId: blog['id']),
                 ],
               ),
