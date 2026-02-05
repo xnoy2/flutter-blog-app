@@ -8,7 +8,7 @@ import '../widgets/avatar_widget.dart';
 class CommentsWidget extends StatefulWidget {
   final String blogId;
 
-  /// If you want comments initially open, set to true
+  // function to hide and show comments true =show false =hide
   final bool initiallyExpanded;
 
   const CommentsWidget({
@@ -36,7 +36,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
   bool sending = false;
   List<Uint8List> imageBytesList = [];
 
-  // count (fallback: we compute it by loading ids)
+  // count
   int totalCount = 0;
   bool countLoading = true;
 
@@ -58,12 +58,12 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     super.dispose();
   }
 
-  // ================= COUNT ONLY (compatible way) =================
+  // ================= COUNT ONLY
   Future<void> _loadCommentCount() async {
     setState(() => countLoading = true);
 
     try {
-      // Compatible approach: fetch only ids then count length
+      // fetch only ids then count length
       final res = await supabase
           .from('comments')
           .select('id')
@@ -81,7 +81,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     }
   }
 
-  // ================= LOAD COMMENTS =================
+  // ================= LOAD COMMENTS
   Future<void> loadComments() async {
     setState(() {
       loading = true;
@@ -115,7 +115,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     }
   }
 
-  // ================= TOGGLE COLLAPSE =================
+  // ================= TOGGLE COLLAPSE
   Future<void> toggleExpanded() async {
     setState(() => expanded = !expanded);
 
@@ -124,7 +124,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     }
   }
 
-  // ================= PICK MULTIPLE IMAGES =================
+  // ================= PICK MULTIPLE IMAGES
   Future<void> pickImages() async {
     final picker = ImagePicker();
     final images = await picker.pickMultiImage();
@@ -136,7 +136,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     setState(() => imageBytesList.addAll(bytes));
   }
 
-  // ================= DELETE COMMENT =================
+  // ================= DELETE COMMENT
   Future<void> confirmDeleteComment(String id) async {
     final ok = await showDialog<bool>(
       context: context,

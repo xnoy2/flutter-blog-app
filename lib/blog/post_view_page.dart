@@ -58,7 +58,7 @@ class _PostViewPageState extends State<PostViewPage> {
     return const [];
   }
 
-  // FIXED timeAgo for "timestamp without time zone"
+  // timeAgo for "timestamp without time zone"
   String timeAgo(dynamic createdAt) {
     if (createdAt == null) return '';
 

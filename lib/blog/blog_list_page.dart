@@ -377,7 +377,7 @@ class _BlogListPageState extends State<BlogListPage> {
 
                     const SizedBox(height: 8),
 
-                    // Thumbnail + Content (ONLY ONCE)
+                    // Thumbnail + Content 
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
