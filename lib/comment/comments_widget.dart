@@ -8,13 +8,9 @@ import '../widgets/avatar_widget.dart';
 class CommentsWidget extends StatefulWidget {
   final String blogId;
 
-  // function to hide and show comments true =show false =hide
-  final bool initiallyExpanded;
-
   const CommentsWidget({
     super.key,
     required this.blogId,
-    this.initiallyExpanded = false,
   });
 
   @override
@@ -25,11 +21,9 @@ class _CommentsWidgetState extends State<CommentsWidget> {
   final user = supabase.auth.currentUser;
   final TextEditingController _controller = TextEditingController();
 
-  bool expanded = false;
-
   // comments data
   List<Map<String, dynamic>> comments = [];
-  bool loading = false;
+  bool loading = true;
   String? error;
 
   // add comment
@@ -43,13 +37,8 @@ class _CommentsWidgetState extends State<CommentsWidget> {
   @override
   void initState() {
     super.initState();
-    expanded = widget.initiallyExpanded;
-
     _loadCommentCount();
-
-    if (expanded) {
-      loadComments();
-    }
+    loadComments();
   }
 
   @override
@@ -58,12 +47,11 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     super.dispose();
   }
 
-  // ================= COUNT ONLY
+  // ================= COUNT ONLY =================
   Future<void> _loadCommentCount() async {
     setState(() => countLoading = true);
 
     try {
-      // fetch only ids then count length
       final res = await supabase
           .from('comments')
           .select('id')
@@ -81,7 +69,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     }
   }
 
-  // ================= LOAD COMMENTS
+  // ================= LOAD COMMENTS =================
   Future<void> loadComments() async {
     setState(() {
       loading = true;
@@ -115,16 +103,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     }
   }
 
-  // ================= TOGGLE COLLAPSE
-  Future<void> toggleExpanded() async {
-    setState(() => expanded = !expanded);
-
-    if (expanded) {
-      await loadComments();
-    }
-  }
-
-  // ================= PICK MULTIPLE IMAGES
+  // ================= PICK MULTIPLE IMAGES =================
   Future<void> pickImages() async {
     final picker = ImagePicker();
     final images = await picker.pickMultiImage();
@@ -136,7 +115,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     setState(() => imageBytesList.addAll(bytes));
   }
 
-  // ================= DELETE COMMENT
+  // ================= DELETE COMMENT =================
   Future<void> confirmDeleteComment(String id) async {
     final ok = await showDialog<bool>(
       context: context,
@@ -197,99 +176,94 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                     // EXISTING IMAGES
                     if (existingImageUrls.isNotEmpty)
                       Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: List.generate(existingImageUrls.length, (i) {
-                        return Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                existingImageUrls[i],
-                                height: 90,
-                                width: 90,
-                                fit: BoxFit.cover,
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: List.generate(existingImageUrls.length, (i) {
+                          return Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  existingImageUrls[i],
+                                  height: 90,
+                                  width: 90,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                            ),
-
-                            // SAME CLOSE ICON STYLE
-                            Positioned(
-                              top: 4,
-                              right: 4,
-                              child: InkWell(
-                                onTap: () {
-                                  setModalState(() {
-                                    existingImageUrls.removeAt(i);
-                                  });
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(6),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black54,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.close,
-                                    size: 16,
-                                    color: Colors.white,
+                              Positioned(
+                                top: 4,
+                                right: 4,
+                                child: InkWell(
+                                  onTap: () {
+                                    setModalState(() {
+                                      existingImageUrls.removeAt(i);
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.black54,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.close,
+                                      size: 16,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        );
-                      }),
-                    ),
-
-
+                            ],
+                          );
+                        }),
+                      ),
 
                     // NEW IMAGES
-                   if (newImages.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: List.generate(newImages.length, (i) {
-                      return Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.memory(
-                              newImages[i],
-                              height: 90,
-                              width: 90,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-
-                          Positioned(
-                            top: 4,
-                            right: 4,
-                            child: InkWell(
-                              onTap: () {
-                                setModalState(() {
-                                  newImages.removeAt(i);
-                                });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(6),
-                                decoration: const BoxDecoration(
-                                  color: Colors.black54,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.close,
-                                  size: 16,
-                                  color: Colors.white,
+                    if (newImages.isNotEmpty) ...[
+                      const SizedBox(height: 10),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: List.generate(newImages.length, (i) {
+                          return Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.memory(
+                                  newImages[i],
+                                  height: 90,
+                                  width: 90,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                            ),
-                          ),
-                        ],
-                      );
-                    }),
-                  ),
-                ],
+                              Positioned(
+                                top: 4,
+                                right: 4,
+                                child: InkWell(
+                                  onTap: () {
+                                    setModalState(() {
+                                      newImages.removeAt(i);
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.black54,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.close,
+                                      size: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                      ),
+                    ],
 
                     const SizedBox(height: 8),
                     TextButton.icon(
@@ -340,6 +314,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
 
     ctrl.dispose();
     await loadComments();
+    await _loadCommentCount();
   }
 
   // ================= ADD COMMENT =================
@@ -381,9 +356,6 @@ class _CommentsWidgetState extends State<CommentsWidget> {
       _controller.clear();
       imageBytesList.clear();
 
-      // ensure expanded so user sees the new comment
-      if (!expanded) setState(() => expanded = true);
-
       await loadComments();
       await _loadCommentCount();
     } finally {
@@ -398,92 +370,102 @@ class _CommentsWidgetState extends State<CommentsWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Toggle header
+        // Header only (no show/hide)
         Row(
           children: [
-            TextButton.icon(
-              onPressed: toggleExpanded,
-              icon: Icon(expanded ? Icons.expand_less : Icons.expand_more),
-              label: Text(
-                expanded ? 'Hide comments$countText' : 'Show comments$countText',
-              ),
+            Text(
+              'Comments$countText',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const Spacer(),
+            IconButton(
+              tooltip: 'Refresh',
+              onPressed: () async {
+                await loadComments();
+                await _loadCommentCount();
+              },
+              icon: const Icon(Icons.refresh),
             ),
           ],
         ),
+        const SizedBox(height: 6),
 
-        // If collapsed, show nothing else
-        if (!expanded) const SizedBox.shrink(),
-
-        // Expanded content
-        if (expanded) ...[
-          if (loading)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Center(child: CircularProgressIndicator()),
-            )
-          else if (error != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text('Failed to load comments: $error'),
-            )
-          else if (comments.isEmpty)
-            const Padding(
-              padding: EdgeInsets.only(bottom: 10),
-              child: Text('No comments yet. Be the first!'),
-            )
-          else
-            ...comments.map((c) {
-              return ListTile(
-                leading: AvatarWidget(
-                  imageUrl: c['profiles']?['avatar_url'],
-                  size: 36,
-                ),
-                title: Text(
-                  c['profiles']?['display_name'] ?? 'Unknown',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text((c['content'] ?? '').toString()),
-                    if (c['image_urls'] != null &&
-                        (c['image_urls'] as List).isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Wrap(
-                          spacing: 6,
-                          runSpacing: 6,
-                          children: List.generate(
-                            (c['image_urls'] as List).length,
-                            (i) => Image.network(
+        if (loading)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(child: CircularProgressIndicator()),
+          )
+        else if (error != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Text('Failed to load comments: $error'),
+          )
+        else if (comments.isEmpty)
+          const Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: Text('No comments yet. Be the first!'),
+          )
+        else
+          ...comments.map((c) {
+            return ListTile(
+              leading: AvatarWidget(
+                imageUrl: c['profiles']?['avatar_url'],
+                size: 36,
+              ),
+              title: Text(
+                c['profiles']?['display_name'] ?? 'Unknown',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text((c['content'] ?? '').toString()),
+                  if (c['image_urls'] != null &&
+                      (c['image_urls'] as List).isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6),
+                      child: Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: List.generate(
+                          (c['image_urls'] as List).length,
+                          (i) => ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
                               c['image_urls'][i],
                               height: 90,
+                              width: 90,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
                       ),
-                  ],
-                ),
-                trailing: c['author'] == user?.id
-                    ? PopupMenuButton(
-                        itemBuilder: (_) => const [
-                          PopupMenuItem(value: 'edit', child: Text('Edit')),
-                          PopupMenuItem(value: 'delete', child: Text('Delete')),
-                        ],
-                        onSelected: (v) {
-                          if (v == 'edit') {
-                            editComment(c);
-                          } else {
-                            confirmDeleteComment(c['id']);
-                          }
-                        },
-                      )
-                    : null,
-              );
-            }),
+                    ),
+                ],
+              ),
+              trailing: c['author'] == user?.id
+                  ? PopupMenuButton(
+                      itemBuilder: (_) => const [
+                        PopupMenuItem(value: 'edit', child: Text('Edit')),
+                        PopupMenuItem(value: 'delete', child: Text('Delete')),
+                      ],
+                      onSelected: (v) {
+                        if (v == 'edit') {
+                          editComment(c);
+                        } else {
+                          confirmDeleteComment(c['id']);
+                        }
+                      },
+                    )
+                  : null,
+            );
+          }),
 
-          // Image preview before send
-          if (imageBytesList.isNotEmpty)
+        // Image preview before send
+        if (imageBytesList.isNotEmpty)
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -499,8 +481,6 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                       fit: BoxFit.cover,
                     ),
                   ),
-
-                  // CLOSE ICON 
                   Positioned(
                     top: 4,
                     right: 4,
@@ -527,35 +507,36 @@ class _CommentsWidgetState extends State<CommentsWidget> {
             }),
           ),
 
-          // Input row
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.image),
-                onPressed: pickImages,
-              ),
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  maxLines: 2,
-                  decoration: const InputDecoration(
-                    hintText: 'Write a comment',
-                  ),
+        const SizedBox(height: 8),
+
+        // Input row
+        Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.image),
+              onPressed: pickImages,
+            ),
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                maxLines: 2,
+                decoration: const InputDecoration(
+                  hintText: 'Write a comment',
                 ),
               ),
-              IconButton(
-                icon: sending
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.send),
-                onPressed: sending ? null : addComment,
-              ),
-            ],
-          ),
-        ],
+            ),
+            IconButton(
+              icon: sending
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.send),
+              onPressed: sending ? null : addComment,
+            ),
+          ],
+        ),
       ],
     );
   }
