@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:go_router/go_router.dart';
+
 import '../supabase_client.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -10,40 +11,65 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final _emailCtrl = TextEditingController();
-  final _passwordCtrl = TextEditingController();
-  bool loading = false;
+  final emailCtrl = TextEditingController();
+  final passwordCtrl = TextEditingController();
+  final confirmPasswordCtrl = TextEditingController();
 
-  Future<void> handleRegister() async {
-    if (_emailCtrl.text.isEmpty || _passwordCtrl.text.isEmpty) {
-      _show('Email and password are required');
+  bool loading = false;
+  bool obscurePassword = true;
+  bool obscureConfirm = true;
+
+
+  Future<void> register() async {
+    final email = emailCtrl.text.trim();
+    final password = passwordCtrl.text.trim();
+    final confirmPassword = confirmPasswordCtrl.text.trim();
+
+    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('All fields are required')),
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Passwords do not match')),
+      );
       return;
     }
 
     setState(() => loading = true);
 
     try {
-      final res = await supabase.auth.signUp(
-        email: _emailCtrl.text.trim(),
-        password: _passwordCtrl.text,
+      await supabase.auth.signUp(
+        email: email,
+        password: password,
       );
 
-      if (res.user != null) {
-        _show('Account created. Redirecting to Blog Page..');
-        Navigator.pop(context);
-      }
-    } on AuthException catch (e) {
-      _show(e.message);
-    } catch (_) {
-      _show('Unexpected error occurred');
+      if (!mounted) return;
+
+      // Pass message to Login page
+      context.go(
+        '/login',
+        extra: 'Registration successful! Please log in.',
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Registration failed: $e')),
+      );
     } finally {
-      setState(() => loading = false);
+      if (mounted) setState(() => loading = false);
     }
   }
 
-  void _show(String msg) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(msg)));
+  @override
+  void dispose() {
+    emailCtrl.dispose();
+    passwordCtrl.dispose();
+    confirmPasswordCtrl.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,20 +80,85 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            // EMAIL
             TextField(
-              controller: _emailCtrl,
-              decoration: const InputDecoration(labelText: 'Email'),
+              controller: emailCtrl,
+              decoration: const InputDecoration(
+                labelText: 'Email *',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 12),
+
+            // PASSWORD
             TextField(
-              controller: _passwordCtrl,
-              obscureText: true,
-              decoration: const InputDecoration(labelText: 'Password'),
+              controller: passwordCtrl,
+              obscureText: obscurePassword,
+              decoration: InputDecoration(
+                labelText: 'Password *',
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    obscurePassword
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                  ),
+                  onPressed: () =>
+                      setState(() => obscurePassword = !obscurePassword),
+                ),
+              ),
             ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: loading ? null : handleRegister,
-              child: Text(loading ? 'Creating...' : 'Register'),
+            const SizedBox(height: 12),
+
+            // CONFIRM PASSWORD
+            TextField(
+              controller: confirmPasswordCtrl,
+              obscureText: obscureConfirm,
+              decoration: InputDecoration(
+                labelText: 'Confirm Password *',
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    obscureConfirm
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                  ),
+                  onPressed: () =>
+                      setState(() => obscureConfirm = !obscureConfirm),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // REGISTER BUTTON
+            SizedBox(
+            width: 200,
+            height: 48, 
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: loading ? null : register,
+              child: loading
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Text('Register'),
+            ),
+          ),
+
+            const SizedBox(height: 12),
+
+            // BACK TO LOGIN
+            TextButton(
+              onPressed: loading ? null : () => context.go('/login'),
+              child: const Text('Already have an account? Back to Login'),
             ),
           ],
         ),

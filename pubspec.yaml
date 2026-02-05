@@ -38,6 +38,7 @@ dependencies:
   uuid: ^4.4.0
   flutter_image_compress: ^2.1.0
   flutter_dotenv: ^5.1.0
+  go_router: ^14.6.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -66,7 +67,7 @@ flutter:
 
   
   assets:
-    - env
+    - config_env
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

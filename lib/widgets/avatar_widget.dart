@@ -20,10 +20,13 @@ class AvatarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
+      key: ValueKey(imageUrl), // FORCE rebuild when URL changes
       radius: size / 2,
       backgroundColor: Colors.grey.shade300,
       backgroundImage:
-          imageUrl != null && imageUrl!.isNotEmpty ? NetworkImage(imageUrl!) : null,
+          imageUrl != null && imageUrl!.isNotEmpty
+              ? NetworkImage(imageUrl!)
+              : null,
       child: imageUrl == null || imageUrl!.isEmpty
           ? Text(
               _initial(),

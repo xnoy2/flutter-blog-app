@@ -5653,6 +5653,7 @@ SOFTWARE.
 
 --------------------------------------------------------------------------------
 flutter_lints
+go_router
 image_picker_linux
 image_picker_windows
 path_provider
