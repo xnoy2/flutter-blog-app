@@ -100,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile photo saved')),
+        const SnackBar(content: Text('Profile photo saved!')),
       );
     } catch (e) {
       if (!mounted) return;
@@ -152,7 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final name = displayNameCtrl.text.trim();
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Display name is required')),
+        const SnackBar(content: Text('Display name is required!')),
       );
       return;
     }

@@ -90058,7 +90058,7 @@ s=A.aED(o,o,A.Y(a).ax.b,o,o,o,o,o,o,B.k,o,o,o,o,o,o,o,o,o,o)
 r=p.f
 q=r?o:p.gauJ()
 s=A.eE(A.aJi(!1,r?B.lY:B.AB,o,o,o,o,o,o,q,o,s),48,200)
-return A.kY(n,o,new A.by(B.hj,A.e2(A.b([m,B.aN,l,B.Qy,s,B.aN,A.j5(!1,B.W9,o,o,o,o,o,o,r?o:new A.awh(a),o,o)],t.p),B.Z,B.E,B.Q),o))}}
+return A.kY(n,o,new A.by(B.hj,A.e2(A.b([m,B.aN,l,B.Qy,s,B.aN,A.j5(!1,B.Wa,o,o,o,o,o,o,r?o:new A.awh(a),o,o)],t.p),B.Z,B.E,B.Q),o))}}
 A.awi.prototype={
 $0(){return this.a.f=!0},
 $S:0}
@@ -90135,7 +90135,7 @@ r=A.aED(n,n,A.Y(a).ax.b,n,n,n,n,n,n,B.k,n,n,n,n,n,n,n,n,n,n)
 q=o.r
 p=q?n:o.gax1(o)
 r=A.eE(A.aJi(!1,q?B.lY:B.AA,n,n,n,n,n,n,p,n,r),48,200)
-return A.kY(m,n,new A.by(B.hj,A.e2(A.b([l,B.aN,k,B.aN,s,B.Qz,r,B.aN,A.j5(!1,B.W6,n,n,n,n,n,n,q?n:new A.aya(a),n,n)],t.p),B.Z,B.E,B.Q),n))}}
+return A.kY(m,n,new A.by(B.hj,A.e2(A.b([l,B.aN,k,B.aN,s,B.Qz,r,B.aN,A.j5(!1,B.W7,n,n,n,n,n,n,q?n:new A.aya(a),n,n)],t.p),B.Z,B.E,B.Q),n))}}
 A.ayb.prototype={
 $0(){return this.a.r=!0},
 $S:0}
@@ -90259,7 +90259,7 @@ n.push(A.bL("No images selected.",r,r,r,o==null?r:o.bK(B.F),r,r))}else n.push(s.
 o=A.zH(new A.by(B.cc,A.e2(n,B.aw,B.E,B.Q),r),r)
 n=s.r
 m=n?r:s.gaqL()
-return A.kY(p,r,A.RT(A.e2(A.b([k,B.aN,o,B.lZ,A.eE(A.aEC(n?B.iA:B.kK,B.We,m),r,1/0)],l),B.aw,B.E,B.Q),B.cc))}}
+return A.kY(p,r,A.RT(A.e2(A.b([k,B.aN,o,B.lZ,A.eE(A.aEC(n?B.iA:B.kK,B.Wf,m),r,1/0)],l),B.aw,B.E,B.Q),B.cc))}}
 A.ar4.prototype={
 $1(a){return a.pU()},
 $S:72}
@@ -90394,7 +90394,7 @@ return A.aES(B.jo,new A.arc(this),s,B.hZ,!0)},
 ai0(){var s=this.r.length
 if(s===0)return B.a4
 return A.aES(B.jo,new A.ar8(this),s,B.hZ,!0)},
-L(a){var s,r,q=this,p=null,o=A.Y(a),n=A.kq(p,p,p,p,B.Wj),m=o.ok,l=m.w,k=l==null,j=A.bL("Post details",p,p,p,k?p:l.nb(B.cz),p,p),i=q.d
+L(a){var s,r,q=this,p=null,o=A.Y(a),n=A.kq(p,p,p,p,B.Wk),m=o.ok,l=m.w,k=l==null,j=A.bL("Post details",p,p,p,k?p:l.nb(B.cz),p,p),i=q.d
 i===$&&A.a()
 i=A.k7(i,B.Hh,p,1,p,!1,p)
 s=q.e
@@ -90485,7 +90485,7 @@ L(a){var s,r,q,p=this,o=null
 if(p.d)return B.lu
 s=p.e
 r=s==null
-if(!r||p.f==null){q=A.kq(o,o,o,o,B.Wi)
+if(!r||p.f==null){q=A.kq(o,o,o,o,B.Wj)
 return A.kY(q,o,A.hZ(new A.by(B.k_,A.bL(r?"Blog not found":s,o,o,o,o,o,o),o),o,o))}s=p.f
 s.toString
 return new A.zu(s,o)}}
@@ -90611,7 +90611,7 @@ return A.eE(A.q4(q,A.j2(B.b9,p,B.q,B.A7)),130,130)},
 L(a){var s=this,r=null,q=A.b([A.i6(r,r,r,B.GH,r,r,new A.aro(s,a),r,r,r,"Create Post")],t.p),p=s.r
 if(p!=null)q.push(new A.by(B.FP,A.iI(r,A.aE7(p.h(0,"avatar_url"),34),B.X,!1,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,new A.arp(s,a),r,r,r,r,r,r,!1,B.bh),r))
 q.push(A.i6(r,r,r,B.oI,r,r,new A.arq(),r,r,r,r))
-q=A.kq(q,r,r,r,B.Wh)
+q=A.kq(q,r,r,r,B.Wi)
 p=s.f.length
 p+=s.x?1:0
 return A.kY(q,r,new A.C0(new A.Eq(new A.arr(s,a),p,!0,!0,!0,r),r,B.a8,!1,s.d,r,r,!1,r,p,B.X,r,r,B.q,B.ae,r))}}
@@ -90651,7 +90651,7 @@ $0(){return this.a.w=!1},
 $S:0}
 A.aru.prototype={
 $1(a){var s=null,r=this.a
-return A.a3Y(A.b([A.j5(!1,B.Az,s,s,s,s,s,s,new A.ars(r),s,s),A.j5(!1,B.AH,s,s,s,s,s,s,new A.art(r),s,s)],t.p),B.Wk,B.AC)},
+return A.a3Y(A.b([A.j5(!1,B.Az,s,s,s,s,s,s,new A.ars(r),s,s),A.j5(!1,B.AH,s,s,s,s,s,s,new A.art(r),s,s)],t.p),B.Wl,B.AC)},
 $S:116}
 A.ars.prototype={
 $0(){var s=this.a.c
@@ -90967,7 +90967,7 @@ $0(){return this.a.d=!1},
 $S:0}
 A.axp.prototype={
 $1(a){var s=null,r=this.a
-return A.a3Y(A.b([A.j5(!1,B.AE,s,s,s,s,s,s,new A.axn(r),s,s),A.j5(!1,B.AF,s,s,s,s,s,s,new A.axo(r),s,s)],t.p),B.Wp,B.AC)},
+return A.a3Y(A.b([A.j5(!1,B.AE,s,s,s,s,s,s,new A.axn(r),s,s),A.j5(!1,B.AF,s,s,s,s,s,s,new A.axo(r),s,s)],t.p),B.Wq,B.AC)},
 $S:116}
 A.axn.prototype={
 $0(){var s=this.a.c
@@ -91375,7 +91375,7 @@ $0(){return B.b.O(this.a.y,this.b)},
 $S:0}
 A.asE.prototype={
 $1(a){var s=null,r=this.a
-return A.a3Y(A.b([A.j5(!1,B.Az,s,s,s,s,s,s,new A.asC(r),s,s),A.j5(!1,B.AH,s,s,s,s,s,s,new A.asD(r),s,s)],t.p),B.Ws,B.Wf)},
+return A.a3Y(A.b([A.j5(!1,B.Az,s,s,s,s,s,s,new A.asC(r),s,s),A.j5(!1,B.AH,s,s,s,s,s,s,new A.asD(r),s,s)],t.p),B.Ws,B.Wg)},
 $S:116}
 A.asC.prototype={
 $0(){var s=this.a.c
@@ -91423,7 +91423,7 @@ for(r=0;r<k;++r){q=new A.aC(10,10)
 s[r]=new A.mJ(B.b9,B.bj,B.q,A.b([new A.nC(new A.cy(q,q,q,q),A.abw(l[r],B.bN,90,90),o),new A.kU(o,4,4,o,o,o,A.m0(!1,o,!0,A.f7(o,B.dL,B.t,o,o,B.du,o,o,o,o,B.cX,o,o,o),o,!0,o,o,o,o,o,o,o,o,new A.asJ(b,l,r),o,o,o,o,o),o)],n),o)}B.b.O(m,A.b([B.cl,A.TI(s,8,8)],n))}m.push(B.di)
 m.push(A.SP(B.oJ,B.W0,new A.asK(p.d,b)))
 m=A.RT(A.e2(m,B.Z,B.E,B.Q),o)
-return A.a3Y(A.b([A.j5(!1,B.AE,o,o,o,o,o,o,new A.asL(a),o,o),A.j5(!1,B.VX,o,o,o,o,o,o,new A.asM(a),o,o)],n),m,B.Wm)},
+return A.a3Y(A.b([A.j5(!1,B.AE,o,o,o,o,o,o,new A.asL(a),o,o),A.j5(!1,B.VX,o,o,o,o,o,o,new A.asM(a),o,o)],n),m,B.Wn)},
 $S:550}
 A.asI.prototype={
 $0(){this.a.$1(new A.asH(this.b,this.c))},
@@ -91697,7 +91697,7 @@ m=A.Y(a)
 if(k.y)l=B.N3
 else l=A.i6(B.k,j,j,B.GF,j,j,q?j:k.ga0f(),j,j,j,j)
 p=A.b([A.j2(B.Bq,A.b([o,A.rE(2,A.f7(j,l,B.t,j,j,new A.fj(m.ax.b,j,j,j,j,j,B.er),j,j,j,j,j,j,j,j),j,j,j,2,j,j)],p),B.q,B.bj),B.aN],p)
-if(!n)p.push(A.SP(B.GJ,B.Wo,q?j:k.gaxc()))
+if(!n)p.push(A.SP(B.GJ,B.Wp,q?j:k.gaxc()))
 p.push(B.di)
 p.push(A.k7(k.d,B.Hj,j,1,j,!1,j))
 p.push(B.lZ)
@@ -92461,7 +92461,7 @@ A.a_7.prototype={}
 A.v2.prototype={
 L(a){var s=null,r=this.c
 r=r==null?s:"GoException: "+r.a
-return A.DJ(!0,A.hZ(A.e2(A.b([B.W_,B.zZ,A.bL(r==null?"page not found":r,s,s,s,s,s,s),B.zZ,new A.FV(new A.a8z(a),B.W8,s)],t.p),B.Z,B.hS,B.Q),s,s),B.aE,!0)}}
+return A.DJ(!0,A.hZ(A.e2(A.b([B.W_,B.zZ,A.bL(r==null?"page not found":r,s,s,s,s,s,s),B.zZ,new A.FV(new A.a8z(a),B.W9,s)],t.p),B.Z,B.hS,B.Q),s,s),B.aE,!0)}}
 A.a8z.prototype={
 $0(){return A.vb(this.a).u0(0,"/",null)},
 $S:0}
@@ -92511,7 +92511,7 @@ A.vF.prototype={
 L(a){var s=null,r=A.kq(s,s,s,s,B.VW),q=this.c
 q=q==null?s:"GoException: "+q.a
 if(q==null)q="page not found"
-return A.kY(r,s,A.hZ(A.e2(A.b([new A.E1(q,s),A.j5(!1,B.Wl,s,s,s,s,s,s,new A.afF(a),s,s)],t.p),B.Z,B.hS,B.Q),s,s))}}
+return A.kY(r,s,A.hZ(A.e2(A.b([new A.E1(q,s),A.j5(!1,B.Wm,s,s,s,s,s,s,new A.afF(a),s,s)],t.p),B.Z,B.hS,B.Q),s,s))}}
 A.afF.prototype={
 $0(){return A.vb(this.a).u0(0,"/",null)},
 $S:0}
@@ -101574,8 +101574,8 @@ B.II=s([5.62945551,2.72948597],t.n)
 B.IQ=s([6.43023796,2.98020421],t.n)
 B.p1=s([B.IP,B.HX,B.JB,B.JD,B.IH,B.IJ,B.J9,B.IS,B.J1,B.II,B.IQ],t.zg)
 B.IG=s([B.ji,B.jj],A.ay("E<zi>"))
-B.Wn=new A.bv("Edit",null,null,null,null,null,null,null,null)
-B.z1=new A.mp("edit",B.Wn,null,t.wI)
+B.Wo=new A.bv("Edit",null,null,null,null,null,null,null,null)
+B.z1=new A.mp("edit",B.Wo,null,t.wI)
 B.AF=new A.bv("Delete",null,null,null,null,null,null,null,null)
 B.z2=new A.mp("delete",B.AF,null,t.wI)
 B.p2=s([B.z1,B.z2],A.ay("E<ow<l>>"))
@@ -102717,8 +102717,8 @@ B.jr=new A.nz(B.O,null,null,B.DH,null)
 B.N0=new A.by(B.k_,B.jr,null)
 B.N1=new A.by(B.o5,B.jr,null)
 B.FN=new A.aF(0,0,0,10)
-B.W7=new A.bv("No comments yet. Be the first!",null,null,null,null,null,null,null,null)
-B.N2=new A.by(B.FN,B.W7,null)
+B.W8=new A.bv("No comments yet. Be the first!",null,null,null,null,null,null,null,null)
+B.N2=new A.by(B.FN,B.W8,null)
 B.DF=new A.jx(2,null,null,null,null,B.k,null,null,null,null)
 B.lY=new A.dY(18,18,B.DF,null)
 B.N3=new A.by(B.jZ,B.lY,null)
@@ -103064,10 +103064,10 @@ B.QH=new A.l1(3,"hide")
 B.a_2=new A.l1(4,"remove")
 B.QI=new A.l1(5,"timeout")
 B.QJ=new A.wE(null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.Wb=new A.bv("Display name is required",null,null,null,null,null,null,null,null)
-B.QK=new A.eF(B.Wb,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
-B.Wg=new A.bv("Profile photo removed",null,null,null,null,null,null,null,null)
-B.QL=new A.eF(B.Wg,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
+B.We=new A.bv("Display name is required!",null,null,null,null,null,null,null,null)
+B.QK=new A.eF(B.We,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
+B.Wh=new A.bv("Profile photo removed",null,null,null,null,null,null,null,null)
+B.QL=new A.eF(B.Wh,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
 B.Wv=new A.bv("Updated successfully",null,null,null,null,null,null,null,null)
 B.QM=new A.eF(B.Wv,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
 B.Wc=new A.bv("All fields are required",null,null,null,null,null,null,null,null)
@@ -103084,12 +103084,12 @@ B.Wt=new A.bv("Title and content are required",null,null,null,null,null,null,nul
 B.QR=new A.eF(B.Wt,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
 B.W3=new A.bv("Blog created successfully",null,null,null,null,null,null,null,null)
 B.QS=new A.eF(B.W3,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
-B.Wa=new A.bv("Passwords do not match",null,null,null,null,null,null,null,null)
-B.QT=new A.eF(B.Wa,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
-B.W5=new A.bv("Display name saved",null,null,null,null,null,null,null,null)
-B.QU=new A.eF(B.W5,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
-B.Wq=new A.bv("Profile photo saved",null,null,null,null,null,null,null,null)
-B.QV=new A.eF(B.Wq,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
+B.Wb=new A.bv("Passwords do not match",null,null,null,null,null,null,null,null)
+B.QT=new A.eF(B.Wb,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
+B.W6=new A.bv("Display name saved",null,null,null,null,null,null,null,null)
+B.QU=new A.eF(B.W6,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
+B.W5=new A.bv("Profile photo saved!",null,null,null,null,null,null,null,null)
+B.QV=new A.eF(B.W5,null,null,null,null,null,null,null,null,null,null,null,null,B.ak,!1,null,null,null,B.q,null)
 B.A6=new A.Eu(0,"permissive")
 B.QW=new A.Eu(1,"normal")
 B.QX=new A.Eu(2,"forced")
@@ -103468,25 +103468,25 @@ B.W0=new A.bv("Add Images",null,null,null,null,null,null,null,null)
 B.W1=new A.bv("Save changes",null,null,null,null,null,null,null,null)
 B.AA=new A.bv("Register",null,null,null,null,null,null,null,null)
 B.W2=new A.bv("Comment",null,null,null,null,null,null,null,null)
-B.W6=new A.bv("Already have an account? Back to Login",null,null,null,null,null,null,null,null)
+B.W7=new A.bv("Already have an account? Back to Login",null,null,null,null,null,null,null,null)
 B.AB=new A.bv("Login",null,null,null,null,null,null,null,null)
 B.SV=new A.x(!0,B.k,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.W8=new A.bv("Go to home page",null,B.SV,null,null,null,null,null,null)
+B.W9=new A.bv("Go to home page",null,B.SV,null,null,null,null,null,null)
 B.AC=new A.bv("Delete Blog",null,null,null,null,null,null,null,null)
-B.W9=new A.bv("Don't have an account? Register",null,null,null,null,null,null,null,null)
+B.Wa=new A.bv("Don't have an account? Register",null,null,null,null,null,null,null,null)
 B.AD=new A.bv("Add",null,null,null,null,null,null,null,null)
 B.AE=new A.bv("Cancel",null,null,null,null,null,null,null,null)
-B.We=new A.bv("Publish",null,null,null,null,null,null,null,null)
-B.Wf=new A.bv("Delete Comment",null,null,null,null,null,null,null,null)
-B.Wh=new A.bv("Feed",null,null,null,null,null,null,null,null)
-B.Wi=new A.bv("Edit Blog",null,null,null,null,null,null,null,null)
-B.Wj=new A.bv("Edit Post",null,null,null,null,null,null,null,null)
-B.Wk=new A.bv("Are you sure you want to delete this blog?",null,null,null,null,null,null,null,null)
-B.Wl=new A.bv("Home",null,null,null,null,null,null,null,null)
+B.Wf=new A.bv("Publish",null,null,null,null,null,null,null,null)
+B.Wg=new A.bv("Delete Comment",null,null,null,null,null,null,null,null)
+B.Wi=new A.bv("Feed",null,null,null,null,null,null,null,null)
+B.Wj=new A.bv("Edit Blog",null,null,null,null,null,null,null,null)
+B.Wk=new A.bv("Edit Post",null,null,null,null,null,null,null,null)
+B.Wl=new A.bv("Are you sure you want to delete this blog?",null,null,null,null,null,null,null,null)
+B.Wm=new A.bv("Home",null,null,null,null,null,null,null,null)
 B.AG=new A.bv("Post",null,null,null,null,null,null,null,null)
-B.Wm=new A.bv("Edit Comment",null,null,null,null,null,null,null,null)
-B.Wo=new A.bv("Remove avatar",null,null,null,null,null,null,null,null)
-B.Wp=new A.bv("Are you sure you want to delete this blog post?",null,null,null,null,null,null,null,null)
+B.Wn=new A.bv("Edit Comment",null,null,null,null,null,null,null,null)
+B.Wp=new A.bv("Remove avatar",null,null,null,null,null,null,null,null)
+B.Wq=new A.bv("Are you sure you want to delete this blog post?",null,null,null,null,null,null,null,null)
 B.Wr=new A.bv("Profile",null,null,null,null,null,null,null,null)
 B.AH=new A.bv("Yes",null,null,null,null,null,null,null,null)
 B.Ws=new A.bv("Are you sure you want to delete this comment?",null,null,null,null,null,null,null,null)
