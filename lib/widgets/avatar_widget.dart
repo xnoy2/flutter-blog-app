@@ -27,7 +27,7 @@ class AvatarWidget extends StatelessWidget {
           imageUrl != null && imageUrl!.isNotEmpty
               ? NetworkImage(imageUrl!)
               : null,
-      child: imageUrl == null || imageUrl!.isEmpty
+          child: imageUrl == null || imageUrl!.isEmpty
           ? Text(
               _initial(),
               style: TextStyle(
