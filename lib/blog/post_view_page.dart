@@ -20,7 +20,7 @@ class _PostViewPageState extends State<PostViewPage> {
   Map<String, dynamic>? post;
 
 
-  // Scroll-to-comments
+  // Scroll comments
   final ScrollController _scrollCtrl = ScrollController();
   final GlobalKey _commentsKey = GlobalKey();
 
@@ -463,9 +463,7 @@ class _PostViewPageState extends State<PostViewPage> {
   }
 }
 
-// =========================
 // Fullscreen gallery viewer
-// =========================
 class _GalleryViewer extends StatefulWidget {
   final List<String> urls;
   final int initialIndex;
